@@ -7,6 +7,10 @@ import Contenido from "./pages/Contenido";
 import PanelVacaciones from "./pages/PanelVacaciones";
 import InicioSesionAnimado from "./pages/InicioSesion";
 import PlanillaVacaciones from "./pages/PlanillaVacaciones";
+import AprobacionVacaciones from "./pages/AprobacionVacaciones";
+import SolicitudPermiso from "./pages/SolicitudPermiso";
+import NotaVacaciones from "./pages/NotaVacaciones";
+import EstadoPermisoFuncionario from "./pages/EstadoPermisoFuncionario";
 function App() {
   const [isOpen, setIsOpen] = useState(true);
 
@@ -25,6 +29,18 @@ function App() {
             </Routes>
             <Routes>
               <Route path="/planillavacaciones" element={<PlanillaVacaciones />} />
+            </Routes>
+            <Routes>
+              <Route path="/aprobacionvacaciones" element={<AprobacionVacaciones />} />
+            </Routes>
+            <Routes>
+              <Route path="/solicitudpermiso" element={<SolicitudPermiso/>} />
+            </Routes>
+            <Routes>
+              <Route path="/NotaVacaciones" element={<NotaVacaciones/>} />
+            </Routes>
+            <Routes>
+              <Route path="/estadopermiso" element={<EstadoPermisoFuncionario/>} /> 
             </Routes>
           </Contenido>
         </div>

@@ -1,20 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { format } from "date-fns";
+import { CalendarDays } from "lucide-react";  
 
-const FormPlanillaVacaciones = ({ onSubmit, funcionario, initialData = {} }) => {
-  const [fechaInicio, setFechaInicio] = useState(
-    initialData?.fechaInicio ? format(new Date(initialData.fechaInicio), "yyyy-MM-dd") : ""
-  );
-  const [fechaFin, setFechaFin] = useState(
-    initialData?.fechaFin ? format(new Date(initialData.fechaFin), "yyyy-MM-dd") : ""
-  );
-  const [observacion, setObservacion] = useState(initialData?.observacion || "");
+const FormPlanillaVacaciones = ({ onSubmit, funcionario, initialData }) => {
+  const [fechaInicio, setFechaInicio] = useState("");
+  const [fechaFin, setFechaFin] = useState("");
+  const [aprobadoPor, setAprobadoPor] = useState("");
+  const [observacion, setObservacion] = useState("");
+
+  useEffect(() => {
+    if (initialData) {
+      setFechaInicio(initialData.fechaInicio || "");
+      setFechaFin(initialData.fechaFin || "");
+      setAprobadoPor(initialData.aprobadoPor || "");
+      setObservacion(initialData.observacion || "");
+    }
+  }, [initialData]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ fechaInicio, fechaFin, observacion: observacion.trim() });
+    onSubmit({ fechaInicio, fechaFin, aprobadoPor, observacion });
+    // Limpiar formulario si querés
     setFechaInicio("");
     setFechaFin("");
+    setAprobadoPor("");
     setObservacion("");
   };
 
@@ -32,28 +41,38 @@ const FormPlanillaVacaciones = ({ onSubmit, funcionario, initialData = {} }) => 
 
       <form onSubmit={handleSubmit} className="mb-6 space-y-4">
         <div className="flex space-x-4">
+          {/* Fecha Inicio */}
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700">Fecha Inicio</label>
-            <input
-              type="date"
-              value={fechaInicio}
-              onChange={(e) => setFechaInicio(e.target.value)}
-              className="mt-1 p-2 border rounded w-full"
-              required
-            />
+            <div className="relative mt-1">
+              <input
+                type="date"
+                value={fechaInicio}
+                onChange={(e) => setFechaInicio(e.target.value)}
+                className="p-2 border rounded w-full"
+                required
+              />
+              <CalendarDays className="w-5 h-5 text-gray-500 absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none" />
+            </div>
           </div>
+
+          {/* Fecha Fin */}
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700">Fecha Fin</label>
-            <input
-              type="date"
-              value={fechaFin}
-              onChange={(e) => setFechaFin(e.target.value)}
-              className="mt-1 p-2 border rounded w-full"
-              required
-            />
+            <div className="relative mt-1">
+              <input
+                type="date"
+                value={fechaFin}
+                onChange={(e) => setFechaFin(e.target.value)}
+                className="p-2 border rounded w-full"
+                required
+              />
+              <CalendarDays className="w-5 h-5 text-gray-500 absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none" />
+            </div>
           </div>
         </div>
 
+        {/* Observación */}
         <div>
           <label className="block text-sm font-medium text-gray-700">Observación</label>
           <textarea
@@ -63,6 +82,7 @@ const FormPlanillaVacaciones = ({ onSubmit, funcionario, initialData = {} }) => 
           />
         </div>
 
+        {/* Botón */}
         <button
           type="submit"
           className="w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md"
