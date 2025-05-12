@@ -27,6 +27,8 @@ const listarEmpleados = async (req, res) => {
   }
 };
 
+
+
 // Controlador para ver un empleado específico por ID
 const verEmpleado = async (req, res) => {
   try {
@@ -36,9 +38,8 @@ const verEmpleado = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Error al buscar empleado" });
   }
-};
+};   
 
-// Controlador para modificar un empleado por ID
 const modificarEmpleado = async (req, res) => {
   try {
     const empleado = await actualizarEmpleado(req.params.id, req.body);
@@ -52,9 +53,9 @@ const modificarEmpleado = async (req, res) => {
 const borrarEmpleado = async (req, res) => {
   try {
     await eliminarEmpleado(req.params.id);
-    res.json({ mensaje: "Empleado eliminado correctamente" });
+    res.json({ mensaje: "Empleado marcado como eliminado correctamente" });
   } catch (error) {
-    res.status(500).json({ error: "Error al eliminar empleado" });
+    res.status(500).json({ error: "Error al marcar el empleado como eliminado" });
   }
 };
 

@@ -17,9 +17,10 @@ const empleadoSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  departamento: {
-    type: String,
-    required: true,
+  id_departamento:  { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: "Departamentos", 
+    required: true 
   },
   fechaIngreso: {
     type: Date,

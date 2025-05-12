@@ -1,8 +1,12 @@
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { UserIcon, LockClosedIcon } from "@heroicons/react/24/solid";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import VacaTrackProLogo from "../assets/VACATRACKPRO.png";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../features/user/userSlice";
+import { useNavigate } from "react-router-dom";
+
 const InicioSesionAnimado = () => {
   const [usuario, setUsuario] = useState("");
   const [contrasena, setContrasena] = useState("");
@@ -10,6 +14,9 @@ const InicioSesionAnimado = () => {
   const [mostrarContrasena, setMostrarContrasena] = useState(false);
   const [emoji, setEmoji] = useState("😐");
   const [iniciandoSesion, setIniciandoSesion] = useState(false);
+  const [error, setError] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleUsuarioChange = (e) => {
     setUsuario(e.target.value);
@@ -18,12 +25,13 @@ const InicioSesionAnimado = () => {
 
   const handleContrasenaChange = (e) => {
     setContrasena(e.target.value);
-    setEmoji(e.target.value.length > 0 ? "😴" : "😐");
+    setEmoji(e.target.value.length > 0 ? "🫣" : "😐");
   };
 
   const toggleMostrarContrasena = () => {
     setMostrarContrasena(!mostrarContrasena);
   };
+
   const handleOlvideContrasenaClick = () => {
     setEmoji("😲");
     setTimeout(() => setEmoji(usuario.length > 0 ? "😊" : "😐"), 800);
@@ -37,18 +45,42 @@ const InicioSesionAnimado = () => {
 
   const handleIniciarSesionClick = async () => {
     setIniciandoSesion(true);
-    setEmoji("😎");  
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    setEmoji("😎");
+    setError(""); // Limpiar cualquier error previo
 
-    setIniciandoSesion(false);
-    setEmoji("😃");  
+    try {
+      const response = await fetch("http://localhost:3001/api/login", { // Asegúrate de que esta sea la ruta correcta de tu backend
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: usuario, password: contrasena }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Login exitoso, guardar token y datos en Redux
+        dispatch(loginSuccess({ token: data.token, nombre: data.nombre, email: data.email }));
+        navigate("/Inicio");  
+      } else {
+        // Error en el login, mostrar mensaje al usuario
+        setError(data.mensaje || "Error al iniciar sesión");
+        setEmoji("😞");
+      }
+    } catch (error) {
+      console.error("Error al comunicarse con el servidor:", error);
+      setError("Error al conectar con el servidor");
+      setEmoji("🤯");
+    } finally {
+      setIniciandoSesion(false);
+    }
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
-    
-       <motion.div
-        className="bg-gray-900 bg-opacity-90 rounded-xl shadow-2xl p-8 w-full max-w-md" 
+      <motion.div
+        className="bg-gray-900 bg-opacity-90 rounded-xl shadow-2xl p-8 w-full max-w-md"
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8, ease: "easeInOut" }}
@@ -60,13 +92,13 @@ const InicioSesionAnimado = () => {
         >
           <img src={VacaTrackProLogo} alt="Logo VacaTrackPro" className="w-64 mx-auto mb-4" />
         </motion.div>
-        
+
         <motion.div
           className="flex justify-center text-6xl mb-6"
           animate={{ y: [0, -10, 0] }}
           transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse" }}
         >
-          {emoji} 
+          {emoji}
         </motion.div>
 
         <div className="relative mb-4">
@@ -89,14 +121,14 @@ const InicioSesionAnimado = () => {
             onChange={handleContrasenaChange}
             className="w-full pl-10 pr-10 bg-transparent border-b border-blue-300 text-white text-lg py-2 focus:outline-none"
           />
-            <button
-              type="button"
-              onClick={toggleMostrarContrasena}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 focus:outline-none"
-              style={{ background: 'none', border: 'none' }}
-            >
-              {mostrarContrasena ? <EyeSlashIcon className="w-6 h-6 text-white" /> : <EyeIcon className="w-6 h-6 text-white" />}
-            </button>
+          <button
+            type="button"
+            onClick={toggleMostrarContrasena}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 focus:outline-none"
+            style={{ background: 'none', border: 'none' }}
+          >
+            {mostrarContrasena ? <EyeSlashIcon className="w-6 h-6 text-white" /> : <EyeIcon className="w-6 h-6 text-white" />}
+          </button>
         </div>
 
         <div className="flex items-center justify-between mb-4">
@@ -109,10 +141,21 @@ const InicioSesionAnimado = () => {
             />
             Recuérdame
           </label>
-          <a href="#"  onClick={handleOlvideContrasenaClick} className="text-blue-300 text-sm hover:underline focus:outline-none">
+          <a href="#" onClick={handleOlvideContrasenaClick} className="text-blue-300 text-sm hover:underline focus:outline-none">
             Olvidé mi contraseña
           </a>
         </div>
+
+        {error && (
+          <motion.p
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            className="text-red-500 text-sm mb-2"
+          >
+            {error}
+          </motion.p>
+        )}
 
         <button
           type="submit"

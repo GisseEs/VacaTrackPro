@@ -34,10 +34,12 @@ const MenuLateral = ({ isOpen, toggleMenu }) => {
               <MenuItem to="/solicitudpermiso" icon={<DocumentPlusIcon className="h-6 w-6" />} label="Solicud de Permiso" isOpen={isOpen} />
               <MenuItem to="/estadopermiso" icon={<UserIcon className="h-6 w-6" />} label="Estado Permiso Funcionario" isOpen={isOpen} />
               <MenuItem to="/reportes" icon={<ChartBarIcon className="h-6 w-6" />} label="Reportes" isOpen={isOpen} />
-              <MenuItem to="/gestion-empleados" icon={<UserGroupIcon className="h-6 w-6" />} label="Gestión de Empleados" isOpen={isOpen} />
+              <MenuItem to="/gestionempleado" icon={<UserGroupIcon className="h-6 w-6" />} label="Gestión de Empleados" isOpen={isOpen} />
               <MenuItem to="/gestion-sucursales" icon={<BuildingOfficeIcon className="h-6 w-6" />} label="Gestión de Sucursales" isOpen={isOpen} />
               <MenuItem to="/gestion-pendientes" icon={<DocumentMagnifyingGlassIcon className="h-6 w-6" />} label="Gestión Pendientes" isOpen={isOpen} />
               <MenuItem to="/gestion-seguridad" icon={<ShieldCheckIcon className="h-6 w-6" />} label="Gestión de Seguridad" isOpen={isOpen} />
+              <MenuItem to="/gestionusuario" icon={<UserGroupIcon className="h-6 w-6" />} label="Gestión de Usuarios" isOpen={isOpen} />
+              <MenuItem to="/gestionconfiguracion" icon={<ShieldCheckIcon className="h-6 w-6" />} label="Gestión de Configuracion" isOpen={isOpen} />
           </ul>
       </div>
   );
