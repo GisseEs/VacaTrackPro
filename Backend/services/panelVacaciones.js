@@ -1,4 +1,5 @@
-const Empleado = require("../models/empleado"); // Importa tu modelo de Empleado
+
+const Empleado = require("../models/empleado");  
 const ConfiguracionSistema = require("../models/configuracionSistema"); // Importa el modelo de Configuración
 
 const dayjs = require("dayjs");
