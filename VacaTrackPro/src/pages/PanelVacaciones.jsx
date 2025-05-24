@@ -1,34 +1,45 @@
-import React, { useState, useMemo } from "react";
+import React, { useEffect, useMemo  } from "react";
 import dayjs from "dayjs";
 import "dayjs/locale/es";
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchEmpleadosVacaciones } from '../features/empleadosVacaciones/empleadosVacacionesSlice';
+import { fetchEmpleadosVacacionesPorDepartamento } from '../features/empleadosVacaciones/empleadosVacacionesSlice';
 
 dayjs.locale("es");
 
+//const PanelVacaciones = ({ departamentoId }) => { 
 const PanelVacaciones = () => {
-  const [empleados] = useState([
-    { id: 1, nombre: "Gissela", apellido: "Estigarribia", cedula: "1234567", fechaIngreso: "2024-01-02" },
-    { id: 2, nombre: "Liz", apellido: "Florentin", cedula: "2345678", fechaIngreso: "2007-02-20" },
-    { id: 3, nombre: "Juan", apellido: "Perez", cedula: "3456789", fechaIngreso: "2018-03-09" },
-  ]);
+  const dispatch = useDispatch();
+  const empleadosVacaciones = useSelector((state) => state.empleadosVacaciones.lista);
+  const loading = useSelector((state) => state.empleadosVacaciones.loading);
+  const error = useSelector((state) => state.empleadosVacaciones.error);
 
-  const calcularAntiguedad = (fechaIngreso) => dayjs().diff(dayjs(fechaIngreso), "year");
+  useEffect(() => {
+    dispatch(fetchEmpleadosVacaciones());
+  }, [dispatch]);
 
-  const calcularDiasVacaciones = (antiguedad) => (antiguedad >= 10 ? 30 : antiguedad >= 6 ? 18 : 12);
+   //useEffect(() => {
+   
+  // dispatch(fetchEmpleadosVacacionesPorDepartamento(departamentoId)); // Dispara la nueva acción
+  //}, [dispatch, departamentoId]);
 
-  const empleadosProcesados = useMemo(() => 
-    empleados.map((emp) => {
-      const antiguedad = calcularAntiguedad(emp.fechaIngreso);
-      const diasVacaciones = calcularDiasVacaciones(antiguedad);
-      const fechaIngreso = dayjs(emp.fechaIngreso).locale("es");
-      const mesIngreso = fechaIngreso.format("MMMM").toUpperCase();
-      const fechaSalida = fechaIngreso.set("year", dayjs().year()).format("DD/MM/YYYY");
-      //const topeFechaSalida = dayjs(fechaSalida, "DD/MM/YYYY").add(6, "months").format("DD/MM/YYYY");
-      const topeFechaSalida = fechaIngreso.add(antiguedad, "year").add(6, "months").format("DD/MM/YYYY");
+  const empleadosProcesados = useMemo(() => {
+    return empleadosVacaciones.map((emp) => ({
+      ...emp,
+      fechaIngreso: dayjs(emp.fechaIngreso).locale("es").format("DD/MM/YYYY"),
+      mesIngreso: dayjs(emp.fechaIngreso).locale("es").format("MMMM").toUpperCase(),
+      fechaSalida: emp.fechaSalida || 'N/A',
+      antiguedad: emp.antiguedad !== undefined ? `${emp.antiguedad} AÑOS` : 'N/A',
+    }));
+  }, [empleadosVacaciones]);
 
+  if (loading) {
+    return <div>Cargando datos de empleados...</div>;
+  }
 
-      return { ...emp, antiguedad, diasVacaciones, mesIngreso, fechaSalida, topeFechaSalida };
-    }), 
-  [empleados]);
+  if (error) {
+    return <div>Error al cargar los datos: {error}</div>;
+  }
 
   return (
     <div className="p-6">
@@ -51,12 +62,12 @@ const PanelVacaciones = () => {
             {empleadosProcesados.map((emp) => (
               <tr
                 key={emp.id}
-                className={`border text-center ${emp.mesIngreso === dayjs().locale("es").format("MMMM").toUpperCase() ? "bg-yellow-300 font-bold" : ""}`}
+                className={`border text-center ${dayjs(emp.fechaIngreso, "DD/MM/YYYY").locale("es").format("MMMM").toUpperCase() === dayjs().locale("es").format("MMMM").toUpperCase() ? "bg-yellow-300 font-bold" : ""}`}
               >
                 <td className="py-2 px-4">{emp.nombre} {emp.apellido}</td>
                 <td className="py-2 px-4">{emp.cedula}</td>
-                <td className="py-2 px-4">{dayjs(emp.fechaIngreso).format("DD/MM/YYYY")}</td>
-                <td className="py-2 px-4">{emp.antiguedad} AÑOS</td>
+                <td className="py-2 px-4">{emp.fechaIngreso}</td>
+                <td className="py-2 px-4">{emp.antiguedad}</td>
                 <td className="py-2 px-4">{emp.diasVacaciones}</td>
                 <td className="py-2 px-4">{emp.mesIngreso}</td>
                 <td className="py-2 px-4">{emp.fechaSalida}</td>

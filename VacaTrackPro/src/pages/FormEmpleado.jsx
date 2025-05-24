@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import { API_URL } from "@/api/api";
 
 export default function FormEmpleado({ onClose, empleadoEditando }) {
     const [formulario, setFormulario] = useState({
@@ -16,7 +17,7 @@ export default function FormEmpleado({ onClose, empleadoEditando }) {
    const cargarDepartamentos = async () => {
         setCargandoDepartamentos(true);
         try {
-            const res = await fetch("http://localhost:3001/api/departamentos"); // Asume que tienes un endpoint para departamentos
+            const res = await fetch(`${API_URL}/departamentos`); // Asume que tienes un endpoint para departamentos
             const data = await res.json();
             if (res.ok && Array.isArray(data)) {
                 setDepartamentos(data);
@@ -36,8 +37,8 @@ export default function FormEmpleado({ onClose, empleadoEditando }) {
         e.preventDefault();
         const method = empleadoEditando ? "PUT" : "POST";
         const url = empleadoEditando
-            ? `http://localhost:3001/api/empleados/${empleadoEditando._id}`
-            : "http://localhost:3001/api/empleados";
+            ? `${API_URL}/empleados/${empleadoEditando._id}`
+            : `${API_URL}/empleados`;
         try {
             const res = await fetch(url, {
                 method,

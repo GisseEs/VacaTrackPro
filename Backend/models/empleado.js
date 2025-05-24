@@ -2,6 +2,7 @@
 const mongoose = require("mongoose");
 
 const empleadoSchema = new mongoose.Schema({
+
   nombre: {
     type: String,
     required: true,
@@ -21,6 +22,10 @@ const empleadoSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, 
     ref: "Departamentos", 
     required: true 
+  },
+    jefatura: {
+    type: Boolean,
+    required: true,
   },
   fechaIngreso: {
     type: Date,

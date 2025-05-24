@@ -20,6 +20,7 @@ const empleadoRoutes = require("./routes/empleado");
 const userRoutes = require("./routes/usuarios");
 const departamentoRoutes = require("./routes/departamento");
 const configRoutes = require("./routes/configuracionSistema");
+const panelVacacionesRoutes = require("./routes/panelVacaciones");
 
 // 6- Definición de rutas
 app.get("/", (_req, res) => {
@@ -31,6 +32,7 @@ app.use("/api", userRoutes); // Rutas de usuarios
 app.use("/api", empleadoRoutes); // Rutas de empleados  
 app.use("/api", departamentoRoutes); // Rutas de empleados  
 app.use("/api", configRoutes);
+app.use("/api", panelVacacionesRoutes);
 
 // 7- Manejo de rutas no encontradas
 app.use((req, res) => {

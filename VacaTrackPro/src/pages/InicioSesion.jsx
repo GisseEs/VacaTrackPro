@@ -4,9 +4,9 @@ import { UserIcon, LockClosedIcon } from "@heroicons/react/24/solid";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import VacaTrackProLogo from "../assets/VACATRACKPRO.png";
 import { useDispatch } from "react-redux";
-import { loginSuccess } from "../features/user/userSlice";
+import { loginSuccess, fetchEmpleadoData } from "../features/user/userSlice";  
 import { useNavigate } from "react-router-dom";
-
+import { API_URL } from "@/api/api";
 const InicioSesionAnimado = () => {
   const [usuario, setUsuario] = useState("");
   const [contrasena, setContrasena] = useState("");
@@ -21,11 +21,13 @@ const InicioSesionAnimado = () => {
   const handleUsuarioChange = (e) => {
     setUsuario(e.target.value);
     setEmoji(e.target.value.length > 0 ? "😊" : "😐");
+    setError("");
   };
 
   const handleContrasenaChange = (e) => {
     setContrasena(e.target.value);
     setEmoji(e.target.value.length > 0 ? "🫣" : "😐");
+    setError("");
   };
 
   const toggleMostrarContrasena = () => {
@@ -46,10 +48,10 @@ const InicioSesionAnimado = () => {
   const handleIniciarSesionClick = async () => {
     setIniciandoSesion(true);
     setEmoji("😎");
-    setError(""); // Limpiar cualquier error previo
+    setError("");
 
     try {
-      const response = await fetch("http://localhost:3001/api/login", { // Asegúrate de que esta sea la ruta correcta de tu backend
+      const response = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -60,11 +62,10 @@ const InicioSesionAnimado = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Login exitoso, guardar token y datos en Redux
         dispatch(loginSuccess({ token: data.token, nombre: data.nombre, email: data.email }));
-        navigate("/Inicio");  
+        dispatch(fetchEmpleadoData(data.id_empleado)); // Despacha la acción para obtener la info del empleado
+        navigate("/Inicio");
       } else {
-        // Error en el login, mostrar mensaje al usuario
         setError(data.mensaje || "Error al iniciar sesión");
         setEmoji("😞");
       }
@@ -125,7 +126,7 @@ const InicioSesionAnimado = () => {
             type="button"
             onClick={toggleMostrarContrasena}
             className="absolute right-3 top-1/2 transform -translate-y-1/2 focus:outline-none"
-            style={{ background: 'none', border: 'none' }}
+            style={{ background: "none", border: "none" }}
           >
             {mostrarContrasena ? <EyeSlashIcon className="w-6 h-6 text-white" /> : <EyeIcon className="w-6 h-6 text-white" />}
           </button>
@@ -141,7 +142,11 @@ const InicioSesionAnimado = () => {
             />
             Recuérdame
           </label>
-          <a href="#" onClick={handleOlvideContrasenaClick} className="text-blue-300 text-sm hover:underline focus:outline-none">
+          <a
+            href="#"
+            onClick={handleOlvideContrasenaClick}
+            className="text-blue-300 text-sm hover:underline focus:outline-none"
+          >
             Olvidé mi contraseña
           </a>
         </div>
@@ -164,10 +169,7 @@ const InicioSesionAnimado = () => {
           disabled={iniciandoSesion}
         >
           {iniciandoSesion ? (
-            <motion.span
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 0.5, repeat: Infinity }}
-            >
+            <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 0.5, repeat: Infinity }}>
               Iniciando Sesión...
             </motion.span>
           ) : (

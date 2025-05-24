@@ -10,4 +10,4 @@ const login = async (req, res) => {
   const token = jwt.sign({ userId: user._id }, 'SECRETO_JWT', { expiresIn: '1h' });
   return { token, userId: user._id };
 };
-module.exports = { login };
+module.exports = { login };  
