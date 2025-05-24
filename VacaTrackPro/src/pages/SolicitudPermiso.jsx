@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { mostrarExito, mostrarAdvertencia } from '../utils/alertas'
+import { API_URL } from "@/api/api";
 
 export default function SolicitudPermiso() {
   const empleado = {

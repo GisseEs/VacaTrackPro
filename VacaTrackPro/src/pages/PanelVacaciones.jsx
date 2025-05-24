@@ -4,6 +4,7 @@ import "dayjs/locale/es";
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchEmpleadosVacaciones } from '../features/empleadosVacaciones/empleadosVacacionesSlice';
 import { fetchEmpleadosVacacionesPorDepartamento } from '../features/empleadosVacaciones/empleadosVacacionesSlice';
+import { API_URL } from "@/api/api";
 
 dayjs.locale("es");
 

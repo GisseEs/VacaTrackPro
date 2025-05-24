@@ -1,4 +1,4 @@
-const Departamento = require("../models/Departamento"); // Asegúrate de que el modelo se llame "Departamento"
+const Departamento = require("../models/departamento"); // Asegúrate de que el modelo se llame "Departamento"
 
 // Crear un nuevo departamento
 const crearDepartamento = async (datos) => {

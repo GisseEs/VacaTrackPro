@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { formatDistanceToNow, parseISO, format } from "date-fns";
 import { es } from "date-fns/locale";
 import { mostrarError } from "../utils/alertas";
+import { API_URL } from "@/api/api";
 
 const permisosSimulados = [
   {

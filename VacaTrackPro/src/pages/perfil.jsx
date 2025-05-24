@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { userSlice } from "../features/user/userSlice";
 import Swal from "sweetalert2";
+import { API_URL } from "@/api/api";
 
 export default function Perfil() {
   const dispatch = useDispatch();
@@ -54,7 +55,7 @@ export default function Perfil() {
     };
 
     try {
-      const response = await fetch(`http://localhost:3001/api/usuarios/${user.id}`, {
+      const response = await fetch(`${API_URL}/usuarios/${user.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

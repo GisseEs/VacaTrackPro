@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import { API_URL } from "@/api/api";
 
 export default function Usuario() {
     const [usuarios, setUsuarios] = useState([]);
@@ -15,7 +16,7 @@ export default function Usuario() {
 
     const cargarUsuarios = async () => {
         try {
-            const res = await fetch("http://localhost:3001/api/usuarios");
+            const res = await fetch(`${API_URL}/usuarios`);
             const data = await res.json();
             if (res.ok && Array.isArray(data.data)) {
                 setUsuarios(data.data);
@@ -30,7 +31,7 @@ export default function Usuario() {
     const cargarEmpleados = async () => {
         setCargandoEmpleados(true);
         try {
-            const res = await fetch("http://localhost:3001/api/empleados");
+            const res = await fetch(`${API_URL}/empleados`);
     
             if (!res.ok) {
                 console.error("Error al cargar empleados:", res.status, res.statusText);
@@ -76,8 +77,8 @@ export default function Usuario() {
         e.preventDefault();
         try {
             const url = editandoId
-                ? `http://localhost:3001/api/usuarios/${editandoId}`
-                : "http://localhost:3001/api/usuarios";
+                ? `${API_URL}/usuarios/${editandoId}`
+                : `${API_URL}/usuarios`;
             const method = editandoId ? "PUT" : "POST";
 
             const res = await fetch(url, {
@@ -120,7 +121,7 @@ export default function Usuario() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const res = await fetch(`http://localhost:3001/api/usuarios/${id}`, {
+                    const res = await fetch(`${API_URL}/usuarios/${id}`, {
                         method: "DELETE",
                     });
                     const data = await res.json();

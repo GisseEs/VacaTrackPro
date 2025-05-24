@@ -7,6 +7,7 @@ import {
 } from "../utils/alertas";
 import { generarTextoNota } from "../utils/pdfHelpers";  
 import PDFViewer from "../components/PDFViewer"; 
+import { API_URL } from "@/api/api";
 
 export default function NotaVacacionesRRHH() {
     const [solicitudes, setSolicitudes] = useState([]);
