@@ -1,5 +1,5 @@
 // services/empleado.js
-const Empleado = require("../models/Empleado"); // Usamos require para importar el modelo
+const Empleado = require("../models/empleado"); // Usamos require para importar el modelo
 
 // Crear un nuevo empleado
 const crearEmpleado = async (datos) => {
