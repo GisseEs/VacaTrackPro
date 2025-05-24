@@ -3,6 +3,7 @@ import FiltroAprobVacaciones from "../components/filtroAprobVacaciones";
 import ListaVacaciones from "../components/listaVacaciones";
 import ModalDetalleVacaciones from "../components/modalDetalleVacaciones";
 import Swal from 'sweetalert2';
+import { API_URL } from "@/api/api";
 
 const AprobacionVacaciones = () => {
   const [estadoFiltro, setEstadoFiltro] = useState("Pendientes");

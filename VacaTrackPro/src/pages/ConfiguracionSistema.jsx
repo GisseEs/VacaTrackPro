@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import FormConfiguracionSistema from "../components/FormConfiguracionSistema";
 import Swal from 'sweetalert2';
+import { API_URL } from "@/api/api";
 
 function ConfiguracionSistema() {
     const [configuracion, setConfiguracion] = useState(null);
@@ -12,7 +13,7 @@ function ConfiguracionSistema() {
         setCargando(true);
         setError(null);
         try {
-            const res = await fetch('http://localhost:3001/api/configuraciones');
+            const res = await fetch(`${API_URL}/configuraciones`);
             const data = await res.json();
             if (res.ok && Array.isArray(data) && data.length > 0) {
                 setConfiguracion(data[0]);

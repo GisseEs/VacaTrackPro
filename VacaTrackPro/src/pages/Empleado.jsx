@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import FormEmpleado from "../pages/FormEmpleado";
 import Swal from "sweetalert2";
+ 
+import { API_URL } from "@/api/api";
+
 
 const formatDate = (dateString) => {
     if (!dateString) return "—";
@@ -23,7 +26,7 @@ export default function Empleado() {
     const cargarEmpleados = async () => {
         setCargandoEmpleados(true);
         try {
-            const res = await fetch("http://localhost:3001/api/empleados");
+            const res = await fetch(`${API_URL}/empleados`);
             const data = await res.json();
             if (res.ok && Array.isArray(data)) {
                 setEmpleados(data);
@@ -41,7 +44,7 @@ export default function Empleado() {
     const cargarDepartamentos = async () => {
         setCargandoDepartamentos(true);
         try {
-            const res = await fetch("http://localhost:3001/api/departamentos");  
+            const res = await fetch(`${API_URL}departamentos`);  
             const data = await res.json();
             if (res.ok && Array.isArray(data)) {
                 setDepartamentos(data);
@@ -66,7 +69,7 @@ export default function Empleado() {
         });
         if (confirm.isConfirmed) {
             try {
-                const res = await fetch(`http://localhost:3001/api/empleados/${id}`, { method: "DELETE" });
+                const res = await fetch(`${API_URL}/empleados/${id}`, { method: "DELETE" });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.mensaje || "Error al eliminar");
                 Swal.fire("Eliminado", data.mensaje, "success");
