@@ -1,6 +1,6 @@
 // services/auth.service.js
 const jwt = require('jsonwebtoken');
-const Usuario = require('../models/usuarios');
+const Usuario = require('../models/usuario');
 const login = async (req, res) => {
   const {email} = req.body
   const user = await Usuario.findOne({ email });
